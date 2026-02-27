@@ -1,6 +1,6 @@
 const CACHE_NAME = 'next3d-v1';
 const urlsToCache = [
-  'index7.5.5.html',
+  'index.html',
   'manifest.json'
 ];
 
@@ -15,3 +15,4 @@ self.addEventListener('fetch', event => {
     caches.match(event.request).then(response => response || fetch(event.request))
   );
 });
+
