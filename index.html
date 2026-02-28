@@ -19,38 +19,22 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
 <script>
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const database = firebase.database();
-</script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
-<script>
-  // ပုံ ထဲက သင့်ရဲ့ Firebase Config အသစ်
+  // ပြင်ဆင်ပြီးသား Firebase Config (ဒေတာဘေ့စ်လိပ်စာ အမှန်ထည့်ထားပါတယ်)
   const firebaseConfig = {
     apiKey: "AIzaSyCoU04TXpIrkWcmx3FCPuK3BskhivFFs0Q",
-    authDomain: "next3d-new.firebaseapp.com",
-    projectId: "next3d-new",
-    storageBucket: "next3d-new.firebasestorage.app",
+    authDomain: "mynext3d-secure.firebaseapp.com",
+    projectId: "mynext3d-secure",
+    storageBucket: "mynext3d-secure.appspot.com",
     messagingSenderId: "322301124873",
     appId: "1:322301124873:web:03002dee1e14ccdc8ff3d8",
-    measurementId: "G-N9V4VS7ELG",
-    databaseURL: "https://next3d-new-default-rtdb.firebaseio.com"
+    databaseURL: "https://mynext3d-default-rtdb.firebaseio.com" // ဒီလိပ်စာ မှန်ဖို့ အရမ်းအရေးကြီးပါတယ်
   };
   
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   const database = firebase.database();
 </script>
+
 
 <title>Next3D</title>
 <style>
