@@ -15,8 +15,66 @@
 </script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+</script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<script>
+  // ပုံ ထဲက သင့်ရဲ့ Firebase Config အသစ်
+  const firebaseConfig = {
+    apiKey: "AIzaSyCoU04TXpIrkWcmx3FCPuK3BskhivFFs0Q",
+    authDomain: "next3d-new.firebaseapp.com",
+    projectId: "next3d-new",
+    storageBucket: "next3d-new.firebasestorage.app",
+    messagingSenderId: "322301124873",
+    appId: "1:322301124873:web:03002dee1e14ccdc8ff3d8",
+    measurementId: "G-N9V4VS7ELG",
+    databaseURL: "https://next3d-new-default-rtdb.firebaseio.com"
+  };
+  
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+</script>
+
 <title>Next3D</title>
 <style>
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4); display: flex;
+    justify-content: center; align-items: center; z-index: 9999;
+}
+.activation-card {
+    background: white; padding: 40px 25px; border-radius: 25px;
+    width: 85%; max-width: 380px; text-align: center;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2); color: #333;
+}
+#activationCode {
+    width: 90%; padding: 15px; border: 1px solid #eee;
+    border-radius: 12px; font-size: 18px; text-align: center;
+    margin-bottom: 20px; background: #f9f9f9;
+}
+.activate-btn {
+    width: 95%; padding: 16px; background: #007bff;
+    color: white; border: none; border-radius: 12px;
+    font-size: 16px; font-weight: bold;
+}
+
 /* 1. Body/HTML ကို မျက်နှာပြင် အပြည့် (Full Viewport Height) လုပ်ခြင်း */
 body, html {
     margin: 0;
@@ -723,6 +781,16 @@ text-align:left;
 </head>
 
 <body>
+<div id="activationModal" class="modal-overlay" style="display: none;">
+    <div class="activation-card">
+        <h2 style="margin:0;">Next3D Activation</h2>
+        <p>ဆက်လက်အသုံးပြုရန် ခွင့်ပြုချက်ကုဒ် ရိုက်ထည့်ပါ</p>
+        <small id="displayDeviceId" style="color: #999; display: block; margin-bottom: 10px;"></small>
+        <input type="text" id="activationCode" placeholder="XXXX-XXXX">
+        <button onclick="handleActivation()" class="activate-btn">Activate Now</button>
+    </div>
+</div>
+
 <div class="app-header">Next3D (3D စရင်း ဆော့ဝဲ)</div>
 <div class="app-sub" id="today-text"></div>
 
@@ -2004,6 +2072,44 @@ function clearWinnerData(type) {
 }
 window.onload=function(){ setToday(); loadState(); setupKeypad(); openScreen('home'); };
 </script>
-</body>
+<script>
+let deviceId = localStorage.getItem('next3d_device_id');
+if (!deviceId) {
+    deviceId = 'N3D-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+    localStorage.setItem('next3d_device_id', deviceId);
+}
+document.getElementById('displayDeviceId').innerText = "Device ID: " + deviceId;
 
+window.addEventListener('load', function() {
+    const isActivated = localStorage.getItem('isActivated');
+    if (isActivated !== 'true') {
+        document.getElementById('activationModal').style.display = 'flex';
+    }
+});
+
+function handleActivation() {
+    const inputKey = document.getElementById('activationCode').value.trim();
+    if (!inputKey) return alert("Key ထည့်သွင်းပါ");
+
+    database.ref('activations/' + inputKey).once('value').then((snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            if (data.deviceId === deviceId || !data.deviceId) {
+                database.ref('activations/' + inputKey).update({
+                    deviceId: deviceId,
+                    activatedAt: new Date().toISOString()
+                });
+                localStorage.setItem('isActivated', 'true');
+                document.getElementById('activationModal').style.display = 'none';
+                alert("Activation အောင်မြင်ပါသည်။");
+            } else {
+                alert("ဒီ Key ကို အခြားဖုန်းမှာ သုံးထားပြီးသားပါ");
+            }
+        } else {
+            alert("Key မမှန်ပါ");
+        }
+    });
+}
+</script>
+</body>
 </html>
